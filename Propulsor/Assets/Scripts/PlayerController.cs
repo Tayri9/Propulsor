@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,11 +11,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float impulse = 50f;
 
+    [SerializeField]
+    TextMeshProUGUI labelFuel;
+
+    float fuel = 100f;
+
+    [SerializeField]
+    GameObject prefabParticles;
+
     // Start is called before the first frame update
     void Start()
     {
         //inicializo
         body = GetComponent<Rigidbody2D>();
+        fuel = 100f;
         
     }
 
@@ -23,8 +33,34 @@ public class PlayerController : MonoBehaviour
     {
         //Obtengo datos de movimiento en el mando
         direction.x = Input.GetAxis("Horizontal") * Time.deltaTime * impulse;
-        direction.y = Input.GetAxis("Vertical") * Time.deltaTime * impulse;        
+        direction.y = Input.GetAxis("Vertical") * Time.deltaTime * impulse;
+
+        //Fuel
+        fuel = fuel - 1f * Time.deltaTime;
+        labelFuel.text = ((int)fuel).ToString() + " %"; //fuel.ToString(00.00)
+        
     }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Fuel")
+        {            
+            //col.gameObject.SetActive(false);
+            fuel = fuel + 5f;
+            if (fuel > 100f)
+            {
+                fuel = 100f;
+            }
+
+            //crear particulas
+            Instantiate(prefabParticles, col.transform.position, col.transform.rotation);
+
+            //Destruir fuel
+            Destroy(col.gameObject);
+        }
+    }
+
+
 
     private void FixedUpdate()
     {
