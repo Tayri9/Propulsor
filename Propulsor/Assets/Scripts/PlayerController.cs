@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     GameObject prefabParticles;
+
+    [SerializeField]
+    GameObject labelGameOver;
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +40,14 @@ public class PlayerController : MonoBehaviour
         direction.y = Input.GetAxis("Vertical") * Time.deltaTime * impulse;
 
         //Fuel
-        fuel = fuel - 1f * Time.deltaTime;
+        fuel = fuel - 10f * Time.deltaTime;
         labelFuel.text = ((int)fuel).ToString() + " %"; //fuel.ToString(00.00)
+
+        if(fuel <= 0f)
+        {
+            this.enabled = false;
+            labelGameOver.SetActive(true);
+        }
         
     }
 
@@ -61,10 +71,15 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
     private void FixedUpdate()
     {
         //Empujo hacia donde se mueve
         body.AddForce(direction, ForceMode2D.Impulse);
+    }
+
+    public void ClickEnBoton()
+    {
+        Debug.Log("Ha clicado");
+        SceneManager.LoadScene(0);
     }
 }
