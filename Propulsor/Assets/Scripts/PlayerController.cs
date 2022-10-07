@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     GameObject labelGameOver;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +48,8 @@ public class PlayerController : MonoBehaviour
         {
             this.enabled = false;
             labelGameOver.SetActive(true);
+            //sonido game over
+            //GetComponent<AudioSource>().Play();
         }
         
     }
@@ -62,11 +65,15 @@ public class PlayerController : MonoBehaviour
                 fuel = 100f;
             }
 
+            //sonido
+            //col.GetComponent<AudioSource>().Play();
+            //col.enabled = false;
+
             //crear particulas
             Instantiate(prefabParticles, col.transform.position, col.transform.rotation);
 
             //Destruir fuel
-            Destroy(col.gameObject);
+            Destroy(col.gameObject/*, 1f*/);
         }
     }
 
